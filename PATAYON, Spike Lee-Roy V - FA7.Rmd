@@ -1,0 +1,107 @@
+---
+title: "FA 7"
+author: "PATAYON, SPIKE LEE-ROY V"
+date: "2024-02-29"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+with λ =4 per minute, use R to obtain:
+(a) P(T < or equal to 0.25) = P(time between submissions is at most 15 seconds);
+(b) P(T > 0.5) = P(time between submissions is greater than 30 seconds);
+(c) P(0.25 < T < 1) = P(time between submissions is between 15 second
+and 1 minute)
+
+```{r}
+# Rate parameter
+lambda <- 4
+
+# a
+prob_a <- pexp(0.25, rate = lambda)
+
+# b
+prob_b <- 1 - pexp(0.5, rate = lambda)
+
+# c
+prob_c <- pexp(1, rate = lambda) - pexp(0.25, rate = lambda)
+
+# results
+cat("P(T <= 0.25) =", prob_a, "\n")
+cat("P(T > 0.5) =", prob_b, "\n")
+cat("P(0.25 < T < 1) =", prob_c, "\n")
+```
+  
+The average rate of job submissions in a computer center is 2 per minute. If it can be assumed that the number of submissions per minute has a Poisson distribution, calculate the probability that:
+
+(a) more than two jobs will arrive in a minute;
+(b) at least 30 seconds will elapse between any two jobs;
+(c) less than 30 seconds will elapse between jobs;
+(d) a job will arrive in the next 30 seconds, if no jobs have arrived in the last
+30 seconds.
+
+```{r}
+# rate of job submissions or the lambda
+lambda <- 2
+
+# a
+prob_more_than_two <- 1 - ppois(2, lambda)
+
+# b
+time_between_jobs <- 30/60
+prob_at_least_30_seconds <- ppois(0, lambda * time_between_jobs)
+
+# c
+prob_less_than_30_seconds <- 1 - prob_at_least_30_seconds
+
+# d
+prob_job_next_30_seconds <- 1 - ppois(0, lambda * time_between_jobs)
+
+#results
+cat("Probability of more than two jobs arriving in a minute:", prob_more_than_two, "\n")
+cat("Probability of at least 30 seconds between any two jobs:", prob_at_least_30_seconds, "\n")
+cat("Probability of less than 30 seconds between jobs:", prob_less_than_30_seconds, "\n")
+cat("Probability of a job arriving in the next 30 seconds:", prob_job_next_30_seconds, "\n")
+
+```
+A website receives an average of 15 visits per hour, which arrive following a
+Poisson distribution:
+
+(a) Calculate the probability that at least 10 minutes will elapse without
+a visit
+(b) What is the probability that in any hour, there will be less than eight visits?
+(c) Suppose that 15 minutes have elapsed since the last visit, what is the probability that a visit will occur in the next 15 minutes
+(d) Calculate the top quartile, and explain what it means
+
+```{r}
+# Average visits per hour
+lambda <- 15
+
+# a
+time_without_visit <- 10 / 60
+prob_no_visit <- ppois(0, lambda * time_without_visit, lower.tail = TRUE)
+prob_at_least_one_visit <- 1 - prob_no_visit
+
+# b
+prob_less_than_eight_visits <- ppois(7, lambda, lower.tail = TRUE)
+
+# c
+time_since_last_visit <- 15 / 60
+prob_visit_in_next_15_min <- 1 - ppois(0, lambda * time_since_last_visit, lower.tail = TRUE)
+
+# d
+top_quartile <- qpois(0.75, lambda)
+
+prob_at_least_one_visit = round(prob_at_least_one_visit, digits=2)
+prob_less_than_eight_visits = round(prob_less_than_eight_visits, digits=2)
+prob_visit_in_next_15_min  = round(prob_visit_in_next_15_min, digits=2)
+# result
+print(paste("Probability of at least 10 minutes without a visit:", prob_at_least_one_visit))
+print(paste("Probability of less than eight visits in any hour:", prob_less_than_eight_visits))
+print(paste("Probability of a visit occurring in the next 15 minutes:", prob_visit_in_next_15_min))
+print(paste("Top quartile (75th percentile):", top_quartile))
+```
+
+
